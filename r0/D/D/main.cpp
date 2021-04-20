@@ -15,28 +15,21 @@ int main() {
         vector<int> a(n + 1);
         for (int i = 1; i <= n; i++) a[i] = i;
         
-        int k = n;
-        while (k >= 3) {
-            int x = ask(a[1], a[2], a[3]);
-            if (x == -1) return 0;
-            int i = (x == a[1]) ? 1 : ((x == a[2]) ? 2 : 3);
-            swap(a[i], a[3]);
-            swap(a[3], a[k--]);
-        }
-        
-        random_shuffle(a.begin() + 3, a.end());
-        swap(a[2], a[n]);
-
-        for (int i = 3; i < n; i++) {
-            int lo = 2, hi = i;
+        for (int i = 3; i <= n; i++) {
+            int lo = 1, hi = i;
             while (lo < hi) {
-                int mid = (lo + hi)/2;
-                int x = ask(a[1], a[mid], a[i]);
+                int m1 = lo + (hi - lo)/3;
+                int m2 = hi - (hi - lo + 1)/3;
+                if (m2 == i) m1--, m2--;
+                int x = ask(a[m1], a[m2], a[i]);
                 if (x == -1) return 0;
-                if (x == a[mid]) {
-                    lo = mid + 1;
+                if (x == a[m1]) {
+                    hi = m1;
+                } else if (x == a[m2]) {
+                    lo = m2 + 1;
                 } else {
-                    hi = mid;
+                    lo = m1 + 1;
+                    hi = m2;
                 }
             }
             int x = a[i];
